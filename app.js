@@ -44,7 +44,6 @@ const API_URL = 'https://api.openai.com/v1/chat/completions';
 // Modifiez la fonction callOpenAI dans app.js
 async function callOpenAI(prompt, model = 'gpt-4o') {
     try {
-        // URL de votre webhook Make.com
         const makeWebhookUrl = 'https://hook.eu2.make.com/dyx7p6mu5rm9n1dumi9proom9bfvohh4';
         
         const response = await fetch(makeWebhookUrl, {
@@ -60,7 +59,7 @@ async function callOpenAI(prompt, model = 'gpt-4o') {
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Error calling webhook:', error);
+        console.error('Error calling Make.com webhook:', error);
         alert(`Erreur lors de l'appel au service IA: ${error.message}`);
         return null;
     }
