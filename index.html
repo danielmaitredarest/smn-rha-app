@@ -125,10 +125,10 @@
                                         <label for="job-missions" class="form-label">Missions principales</label>
                                         <textarea class="form-control" id="job-missions" rows="4" required></textarea>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="openai-key" class="form-label">Clé API OpenAI (sera stockée localement)</label>
-                                        <input type="password" class="form-control" id="openai-key" placeholder="sk-...">
-                                    </div>
+                                    <!-- Clé API OpenAI intégrée dans le code -->
+									<div class="d-none">
+										<input type="hidden" id="openai-key">
+									</div>
                                     <button type="submit" class="btn btn-primary w-100" id="generate-job-btn">
                                         <i class="fas fa-magic me-2"></i>Générer l'offre d'emploi
                                     </button>
