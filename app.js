@@ -89,41 +89,33 @@ async function callOpenAI(prompt, model = 'gpt-4o') {
 
 // ---- APP 1: JOB GENERATOR ----
 function setupJobGenerator() {
-    // Show/hide duration field based on contract type
-    document.getElementById('job-contract-type').addEventListener('change', function() {
-        const durationContainer = document.getElementById('job-duration-container');
-        durationContainer.style.display = this.value === 'CDD' ? 'block' : 'none';
-    });
+// Trouvez cette partie dans app.js (fonction setupJobGenerator ou gestionnaire d'événements du formulaire)
+document.getElementById('job-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
     
-    // Set default dates
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('job-publish-date').value = today;
+    // Ajout de logs pour débugger
+    console.log("Formulaire soumis");
     
-    // Generate job description
-    document.getElementById('job-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const generateBtn = document.getElementById('generate-job-btn');
-        generateBtn.disabled = true;
-        generateBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Génération en cours...';
-        
-        // Get form values
-        const title = document.getElementById('job-title').value;
-        const department = document.getElementById('job-department').value;
-        const location = document.getElementById('job-location').value;
-        const activityRate = document.getElementById('job-activity-rate').value;
-        const contractType = document.getElementById('job-contract-type').value;
-        const duration = document.getElementById('job-duration').value;
-        const startDate = document.getElementById('job-start-date').value;
-        const publishDate = document.getElementById('job-publish-date').value;
-        const description = document.getElementById('job-description').value;
-        const missions = document.getElementById('job-missions').value;
-        
-        // Save OpenAI key
-        openAIKey = document.getElementById('openai-key').value;
-        
-        // Create prompt
-        const prompt = `Tu es un recruteur expert dans le domaine médical.
+    const generateBtn = document.getElementById('generate-job-btn');
+    generateBtn.disabled = true;
+    generateBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Génération en cours...';
+    
+    // Get form values
+    const title = document.getElementById('job-title').value;
+    const department = document.getElementById('job-department').value;
+    const location = document.getElementById('job-location').value;
+    const activityRate = document.getElementById('job-activity-rate').value;
+    const contractType = document.getElementById('job-contract-type').value;
+    const duration = document.getElementById('job-duration').value;
+    const startDate = document.getElementById('job-start-date').value;
+    const publishDate = document.getElementById('job-publish-date').value;
+    const description = document.getElementById('job-description').value;
+    const missions = document.getElementById('job-missions').value;
+    
+    console.log("Données du formulaire:", { title, department, location });
+    
+    // Create prompt (avec ou sans OpenAI key selon votre configuration actuelle)
+    const prompt = `Tu es un recruteur expert dans le domaine médical.
 
 À partir des informations ci-dessous, génère une **offre d'emploi professionnelle**, complète et engageante.
 
@@ -147,9 +139,13 @@ Structure la réponse ainsi :
 6. Contact RH
 
 À la fin, ajoute un **résumé pour LinkedIn (max 300 caractères)**.`;
-        
-        // Call OpenAI API
+
+    console.log("Prompt préparé, appel à callOpenAI");
+    
+    // Call OpenAI API via notre fonction modifiée
+    try {
         const generatedContent = await callOpenAI(prompt);
+        console.log("Réponse reçue de callOpenAI:", generatedContent);
         
         if (generatedContent) {
             // Extract LinkedIn summary
@@ -186,38 +182,19 @@ Structure la réponse ainsi :
                 generatedJob: jobDescription,
                 linkedinSummary
             });
+        } else {
+            console.error("Pas de contenu généré reçu");
+            alert("Erreur lors de la génération de l'offre d'emploi. Veuillez réessayer.");
         }
-        
+    } catch (error) {
+        console.error("Erreur lors de l'appel à callOpenAI:", error);
+        alert("Erreur lors de la génération de l'offre d'emploi: " + error.message);
+    } finally {
         // Reset button
         generateBtn.disabled = false;
         generateBtn.innerHTML = '<i class="fas fa-magic me-2"></i>Générer l\'offre d\'emploi';
-    });
-    
-    // Copy job button
-    document.getElementById('copy-job-btn').addEventListener('click', function() {
-        const jobContent = document.getElementById('job-result').innerText;
-        navigator.clipboard.writeText(jobContent)
-            .then(() => alert('Offre d\'emploi copiée dans le presse-papier'))
-            .catch(err => console.error('Erreur lors de la copie :', err));
-    });
-}
-
-// Save job to Firestore
-async function saveJobToFirestore(jobData) {
-    try {
-        const { collection, addDoc } = window.firebaseModules;
-        const db = window.db;
-        
-        // Add job to Firestore
-        await addDoc(collection(db, 'jobs'), jobData);
-        
-        // Refresh job listings
-        loadJobListings();
-        
-    } catch (error) {
-        console.error('Error saving job to Firestore:', error);
     }
-}
+});
 
 // Utility function to format text with HTML
 function formatText(text) {
