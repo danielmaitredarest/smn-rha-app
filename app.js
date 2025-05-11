@@ -1,5 +1,7 @@
 // Wait for DOM to be ready
 document.addEventListener('DOMContentLoaded', function() {
+// Tab navigation
+document.addEventListener('DOMContentLoaded', function() {
     // Tab navigation
     const navLinks = document.querySelectorAll('.nav-link[data-tab]');
     const tabContents = document.querySelectorAll('.tab-content');
@@ -17,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+});
     
     // ---- APP 1: JOB GENERATOR ----
     setupJobGenerator();
@@ -35,19 +38,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Global variables
-let openAIKey = '';
+let openAIKey = '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';
 const API_URL = 'https://api.openai.com/v1/chat/completions';
 
 // Global utility to make OpenAI API calls
 async function callOpenAI(prompt, model = 'gpt-4o') {
-    if (!openAIKey) {
-        openAIKey = document.getElementById('openai-key').value;
-        if (!openAIKey) {
-            alert('Veuillez entrer une clé API OpenAI dans le formulaire de générateur d\'offres d\'emploi.');
-            return null;
-        }
-    }
-    
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
