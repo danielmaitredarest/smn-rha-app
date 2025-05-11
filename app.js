@@ -41,41 +41,27 @@ document.addEventListener('DOMContentLoaded', function() {
 let openAIKey = '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';
 const API_URL = 'https://api.openai.com/v1/chat/completions';
 
-// Global utility to make OpenAI API calls
+// Modifiez la fonction callOpenAI dans app.js
 async function callOpenAI(prompt, model = 'gpt-4o') {
     try {
-        const response = await fetch(API_URL, {
+        // URL de votre webhook Make.com
+        const makeWebhookUrl = 'https://hook.eu2.make.com/dyx7p6mu5rm9n1dumi9proom9bfvohh4';
+        
+        const response = await fetch(makeWebhookUrl, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${openAIKey}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: model,
-                messages: [
-                    {
-                        role: 'system',
-                        content: 'Tu es un expert en ressources humaines dans le secteur médical, tu réponds de manière précise et professionnelle.'
-                    },
-                    {
-                        role: 'user',
-                        content: prompt
-                    }
-                ],
-                temperature: 0.7
+                prompt: prompt
             })
         });
         
         const data = await response.json();
-        
-        if (data.error) {
-            throw new Error(data.error.message);
-        }
-        
-        return data.choices[0].message.content;
+        return data;
     } catch (error) {
-        console.error('Error calling OpenAI API:', error);
-        alert(`Erreur lors de l'appel à l'API OpenAI: ${error.message}`);
+        console.error('Error calling webhook:', error);
+        alert(`Erreur lors de l'appel au service IA: ${error.message}`);
         return null;
     }
 }
