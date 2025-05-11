@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swiss Medical Network - IA RH</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Section -->
+    <div id="login-section" class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <h2 class="mb-4">Swiss Medical Network</h2>
+                        <h4 class="mb-4">Plateforme IA RH</h4>
+                        <div id="login-form">
+                            <div class="mb-3">
+                                <input type="email" id="email" class="form-control" placeholder="Email" value="daniel.maitre@darest.com">
+                            </div>
+                            <div class="mb-3">
+                                <input type="password" id="password" class="form-control" placeholder="Mot de passe" value="Test123!">
+                            </div>
+                            <button id="login-btn" class="btn btn-primary w-100">Se connecter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App (Hidden initially) -->
+    <div id="app-container" class="container-fluid" style="display:none;">
+        <!-- Header -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Swiss Medical Network - IA RH</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-tab="job-generator">1. Générateur d'offres</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-tab="cv-analyzer">2. Analyse de CV</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-tab="interview-questions">3. Questions d'entretien</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-tab="answer-evaluator">4. Évaluation des réponses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-tab="onboarding">5. Onboarding IA</a>
+                        </li>
+                    </ul>
+                    <span class="navbar-text ms-auto">
+                        <button id="logout-btn" class="btn btn-sm btn-light">Déconnexion</button>
+                    </span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Tab Content -->
+        <div class="container mt-4 mb-5">
+            <!-- 1. Générateur d'offres d'emploi -->
+            <div class="tab-content" id="job-generator">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Générateur d'offres d'emploi IA</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <form id="job-form">
+                                    <div class="mb-3">
+                                        <label for="job-title" class="form-label">Intitulé du poste</label>
+                                        <input type="text" class="form-control" id="job-title" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="job-department" class="form-label">Département / Service</label>
+                                        <input type="text" class="form-control" id="job-department" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="job-location" class="form-label">Établissement / Lieu</label>
+                                        <input type="text" class="form-control" id="job-location" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="job-activity-rate" class="form-label">Taux d'activité (%)</label>
+                                        <input type="number" class="form-control" id="job-activity-rate" min="1" max="100" value="100" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="job-contract-type" class="form-label">Type de contrat</label>
+                                        <select class="form-select" id="job-contract-type" required>
+                                            <option value="">Sélectionner...</option>
+                                            <option value="CDI">CDI</option>
+                                            <option value="CDD">CDD</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3" id="job-duration-container" style="display:none;">
+                                        <label for="job-duration" class="form-label">Durée (si CDD)</label>
+                                        <input type="text" class="form-control" id="job-duration">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="job-start-date" class="form-label">Date de début souhaitée</label>
+                                        <input type="date" class="form-control" id="job-start-date" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="job-publish-date" class="form-label">Date de publication</label>
+                                        <input type="date" class="form-control" id="job-publish-date" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="job-description" class="form-label">Description générale</label>
+                                        <textarea class="form-control" id="job-description" rows="4" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="job-missions" class="form-label">Missions principales</label>
+                                        <textarea class="form-control" id="job-missions" rows="4" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="openai-key" class="form-label">Clé API OpenAI (sera stockée localement)</label>
+                                        <input type="password" class="form-control" id="openai-key" placeholder="sk-...">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100" id="generate-job-btn">
+                                        <i class="fas fa-magic me-2"></i>Générer l'offre d'emploi
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <span>Résultat</span>
+                                        <div>
+                                            <button id="copy-job-btn" class="btn btn-sm btn-outline-primary" disabled>
+                                                <i class="fas fa-copy me-1"></i>Copier
+                                            </button>
+                                            <button id="save-job-btn" class="btn btn-sm btn-outline-success" disabled>
+                                                <i class="fas fa-save me-1"></i>Enregistrer
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="job-result" class="p-3 bg-light rounded">
+                                            <p class="text-muted text-center">L'offre d'emploi générée apparaîtra ici.</p>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h6>Résumé LinkedIn</h6>
+                                            <div id="linkedin-summary" class="p-3 bg-light rounded">
+                                                <p class="text-muted text-center">Le résumé LinkedIn apparaîtra ici.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Analyse de CV -->
+            <div class="tab-content" id="cv-analyzer" style="display:none;">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Analyse et scoring de CV avec IA</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">1. Sélectionner une offre d'emploi</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <select class="form-select mb-3" id="job-select">
+                                            <option value="">Sélectionner une offre d'emploi...</option>
+                                        </select>
+                                        <div id="selected-job-details" class="p-3 bg-light rounded" style="max-height: 300px; overflow-y: auto;">
+                                            <p class="text-muted text-center">Sélectionnez une offre d'emploi pour voir les détails.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">2. Importer des CV (format PDF)</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="cv-upload" class="form-label">Sélectionner des fichiers PDF</label>
+                                            <input class="form-control" type="file" id="cv-upload" accept=".pdf" multiple>
+                                        </div>
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle me-2"></i>Vous pouvez sélectionner plusieurs fichiers.
+                                        </div>
+                                        <div id="upload-list" class="mt-3"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mb-4">
+                            <button id="analyze-cvs-btn" class="btn btn-primary" disabled>
+                                <i class="fas fa-robot me-2"></i>Analyser les CV avec l'IA
+                            </button>
+                        </div>
+                        
+                        <div id="analysis-results" style="display:none;">
+                            <h5 class="mb-3">Résultats de l'analyse</h5>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-8">
+                                    <div class="card">
+                                        <div class="card-header bg-light">
+                                            <h6 class="mb-0">Top 5 des candidats</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="top-candidates"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-header bg-light">
+                                            <h6 class="mb-0">Statistiques</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="cv-stats"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0">Tous les candidats</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="candidates-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Candidat</th>
+                                                    <th>Score global</th>
+                                                    <th>Compétences</th>
+                                                    <th>Expérience</th>
+                                                    <th>Formation</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Modal pour les détails d'un candidat -->
+                        <div class="modal fade" id="candidate-modal" tabindex="-1">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Détails du candidat</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body" id="candidate-details">
+                                        <!-- Contenu dynamique -->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                        <button type="button" class="btn btn-primary" id="select-for-interview-btn">
+                                            Sélectionner pour entretien
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Questions d'entretien -->
+            <div class="tab-content" id="interview-questions" style="display:none;">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Générateur de questions d'entretien IA</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Sélectionner un candidat et un poste</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="interview-job-select" class="form-label">Offre d'emploi</label>
+                                            <select class="form-select" id="interview-job-select">
+                                                <option value="">Sélectionner une offre d'emploi...</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="interview-candidate-select" class="form-label">Candidat</label>
+                                            <select class="form-select" id="interview-candidate-select">
+                                                <option value="">Sélectionner un candidat...</option>
+                                            </select>
+                                        </div>
+                                        <button id="generate-questions-btn" class="btn btn-primary w-100" disabled>
+                                            <i class="fas fa-question-circle me-2"></i>Générer les questions
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Profil du candidat</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="interview-candidate-profile" class="p-3 bg-light rounded" style="max-height: 300px; overflow-y: auto;">
+                                            <p class="text-muted text-center">Sélectionnez un candidat pour voir son profil.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="questions-container" style="display:none;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Questions d'entretien personnalisées</h5>
+                                <button id="print-questions-btn" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-print me-1"></i>Imprimer
+                                </button>
+                            </div>
+                            
+                            <div class="accordion" id="questions-accordion">
+                                <!-- Les questions seront générées ici -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Évaluation des réponses -->
+            <div class="tab-content" id="answer-evaluator" style="display:none;">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Évaluation des réponses avec IA</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Sélectionner un entretien</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="eval-job-select" class="form-label">Offre d'emploi</label>
+                                            <select class="form-select" id="eval-job-select">
+                                                <option value="">Sélectionner une offre d'emploi...</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="eval-candidate-select" class="form-label">Candidat</label>
+                                            <select class="form-select" id="eval-candidate-select">
+                                                <option value="">Sélectionner un candidat...</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="eval-question-select" class="form-label">Question</label>
+                                            <select class="form-select" id="eval-question-select" disabled>
+                                                <option value="">Sélectionner une question...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Question sélectionnée</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="selected-question" class="p-3 bg-light rounded">
+                                            <p class="text-muted text-center">Sélectionnez une question.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h6 class="mb-0">Réponse du candidat</h6>
+                            </div>
+                            <div class="card-body">
+                                <textarea class="form-control" id="candidate-answer" rows="5" placeholder="Saisissez ici la réponse du candidat..."></textarea>
+                                <div class="d-grid gap-2 mt-3">
+                                    <button id="evaluate-answer-btn" class="btn btn-primary" disabled>
+                                        <i class="fas fa-check-circle me-2"></i>Évaluer la réponse
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="evaluation-results" style="display:none;">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0">Évaluation IA</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="card border-light mb-3">
+                                                <div class="card-header">Score global</div>
+                                                <div class="card-body text-center">
+                                                    <h1 id="overall-score">-/20</h1>
+                                                    <div class="progress">
+                                                        <div id="score-progress" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card border-light mb-3">
+                                                <div class="card-header">Critères d'évaluation</div>
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6 mb-2">
+                                                            <label>Pertinence</label>
+                                                            <div class="progress">
+                                                                <div id="relevance-score" class="progress-bar bg-info" role="progressbar" style="width: 0%"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 mb-2">
+                                                            <label>Clarté et structure</label>
+                                                            <div class="progress">
+                                                                <div id="clarity-score" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 mb-2">
+                                                            <label>Expertise technique</label>
+                                                            <div class="progress">
+                                                                <div id="expertise-score" class="progress-bar bg-warning" role="progressbar" style="width: 0%"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 mb-2">
+                                                            <label>Adéquation avec le poste</label>
+                                                            <div class="progress">
+                                                                <div id="fit-score" class="progress-bar bg-danger" role="progressbar" style="width: 0%"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <div class="card border-light mb-3">
+                                                <div class="card-header">Analyse détaillée</div>
+                                                <div class="card-body">
+                                                    <p id="detailed-analysis"></p>
+                                                    
+                                                    <h6>Points forts</h6>
+                                                    <ul id="strengths-list"></ul>
+                                                    
+                                                    <h6>Axes d'amélioration</h6>
+                                                    <ul id="improvements-list"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2 mt-3">
+                                        <button id="save-evaluation-btn" class="btn btn-success">
+                                            <i class="fas fa-save me-2"></i>Enregistrer l'évaluation
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Onboarding IA -->
+            <div class="tab-content" id="onboarding" style="display:none;">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Onboarding IA</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Informations sur le nouvel employé</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="onboarding-form">
+                                            <div class="mb-3">
+                                                <label for="employee-name" class="form-label">Nom complet</label>
+                                                <input type="text" class="form-control" id="employee-name" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="onboarding-job-select" class="form-label">Poste</label>
+                                                <select class="form-select" id="onboarding-job-select">
+                                                    <option value="">Sélectionner une offre d'emploi...</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="employee-department" class="form-label">Département</label>
+                                                <input type="text" class="form-control" id="employee-department">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="employee-start-date" class="form-label">Date de début</label>
+                                                <input type="date" class="form-control" id="employee-start-date" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="employee-experience" class="form-label">Expérience précédente</label>
+                                                <textarea class="form-control" id="employee-experience" rows="3"></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary w-100" id="generate-onboarding-btn">
+                                                <i class="fas fa-magic me-2"></i>Générer le plan d'onboarding
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Personnalisation</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label class="form-label">Type d'établissement</label>
+                                            <select class="form-select" id="facility-type">
+                                                <option value="hôpital">Hôpital</option>
+                                                <option value="clinique">Clinique</option>
+                                                <option value="centre médical">Centre médical</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Durée du plan d'onboarding</label>
+                                            <select class="form-select" id="onboarding-duration">
+                                                <option value="30">30 jours</option>
+                                                <option value="60">60 jours</option>
+                                                <option value="90">90 jours</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Options supplémentaires</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="include-mentor" checked>
+                                                <label class="form-check-label" for="include-mentor">
+                                                    Inclure un programme de mentorat
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="include-training" checked>
+                                                <label class="form-check-label" for="include-training">
+                                                    Inclure des formations spécifiques
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="include-checkpoints" checked>
+                                                <label class="form-check-label" for="include-checkpoints">
+                                                    Inclure des points de contrôle réguliers
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="onboarding-results" style="display:none;">
+                            <div class="card">
+                                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">Plan d'onboarding personnalisé</h6>
+                                    <div>
+                                        <button id="print-onboarding-btn" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-print me-1"></i>Imprimer
+                                        </button>
+                                        <button id="export-calendar-btn" class="btn btn-sm btn-outline-success">
+                                            <i class="fas fa-calendar-alt me-1"></i>Exporter calendrier
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="nav nav-tabs" id="onboardingTabs" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="calendar-tab" data-bs-toggle="tab" data-bs-target="#calendar-content" type="button" role="tab">Calendrier</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="manager-tab" data-bs-toggle="tab" data-bs-target="#manager-content" type="button" role="tab">Checklist Manager</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="employee-tab" data-bs-toggle="tab" data-bs-target="#employee-content" type="button" role="tab">Checklist Employé</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="resources-tab" data-bs-toggle="tab" data-bs-target="#resources-content" type="button" role="tab">Ressources</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="objectives-tab" data-bs-toggle="tab" data-bs-target="#objectives-content" type="button" role="tab">Objectifs</button>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content p-3" id="onboardingTabContent">
+                                        <div class="tab-pane fade show active" id="calendar-content" role="tabpanel">
+                                            <div id="onboarding-calendar"></div>
+                                        </div>
+                                        <div class="tab-pane fade" id="manager-content" role="tabpanel">
+                                            <div id="manager-checklist"></div>
+                                        </div>
+                                        <div class="tab-pane fade" id="employee-content" role="tabpanel">
+                                            <div id="employee-checklist"></div>
+                                        </div>
+                                        <div class="tab-pane fade" id="resources-content" role="tabpanel">
+                                            <div id="resources-list"></div>
+                                        </div>
+                                        <div class="tab-pane fade" id="objectives-content" role="tabpanel">
+                                            <div id="objectives-list"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4VIuMHFdCG4BWgNYvsvIJPIA6q9zJq74",
+            authDomain: "smn-rha-app.firebaseapp.com",
+            projectId: "smn-rha-app",
+            storageBucket: "smn-rha-app.firebasestorage.app",
+            messagingSenderId: "756944571309",
+            appId: "1:756944571309:web:ed0a173c23f882e00eef24",
+            measurementId: "G-XZHJ9ELRK1"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        
+        // Make Firebase available globally
+        window.firebaseApp = app;
+    </script>
+    
+    <!-- PDF.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Firebase Auth -->
+    <script type="module">
+        import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+        
+        // Initialize Firebase Auth and Firestore
+        const auth = getAuth();
+        const db = getFirestore();
+        
+        // Make them available globally
+        window.auth = auth;
+        window.db = db;
+        window.firebaseModules = {
+            signInWithEmailAndPassword,
+            signOut,
+            collection,
+            addDoc,
+            getDocs,
+            doc,
+            getDoc,
+            setDoc,
+            updateDoc
+        };
+        
+        // Login functionality
+        document.getElementById('login-btn').addEventListener('click', function() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Show main app
+                    document.getElementById('login-section').style.display = 'none';
+                    document.getElementById('app-container').style.display = 'block';
+                    
+                    // Load data
+                    loadJobListings();
+                })
+                .catch((error) => {
+                    alert("Erreur d'authentification: " + error.message);
+                });
+        });
+        
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            signOut(auth).then(() => {
+                document.getElementById('login-section').style.display = 'block';
+                document.getElementById('app-container').style.display = 'none';
+            });
+        });
+        
+        // Auto-login if session exists
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('app-container').style.display = 'block';
+                
+                // Load data
+                loadJobListings();
+            }
+        });
+        
+        // Function to load job listings from Firestore
+        window.loadJobListings = async function() {
+            try {
+                const jobsCollection = collection(db, 'jobs');
+                const jobSnapshot = await getDocs(jobsCollection);
+                
+                // Clear existing options
+                const jobSelects = document.querySelectorAll('#job-select, #interview-job-select, #eval-job-select, #onboarding-job-select');
+                jobSelects.forEach(select => {
+                    // Keep only the first option
+                    const firstOption = select.options[0];
+                    select.innerHTML = '';
+                    select.appendChild(firstOption);
+                });
+                
+                // Add jobs to dropdowns
+                jobSnapshot.forEach((doc) => {
+                    const job = doc.data();
+                    const option = new Option(job.title + ' - ' + job.location, doc.id);
+                    
+                    jobSelects.forEach(select => {
+                        select.appendChild(option.cloneNode(true));
+                    });
+                });
+            } catch (error) {
+                console.error("Error loading job listings: ", error);
+            }
+        };
+    </script>
+    
+    <!-- Custom JS -->
+    <script src="app.js"></script>
+</body>
+</html>
